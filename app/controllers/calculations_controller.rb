@@ -1,5 +1,16 @@
 class CalculationsController < ApplicationController
 
+    def unique1(array)
+        array1 = array.split(" ")
+        count1 = 0
+        array1.each do |word1|
+        if word1 == @special_word
+            count1 = count1 + 1
+        end
+        end
+        return(count1)
+    end
+
   def word_count
     @text = params[:user_text]
     @special_word = params[:user_word]
@@ -11,13 +22,13 @@ class CalculationsController < ApplicationController
     # ================================================================================
 
 
-    @character_count_with_spaces = "Replace this string with your answer."
+    @character_count_with_spaces = @text.length
 
-    @character_count_without_spaces = "Replace this string with your answer."
+    @character_count_without_spaces = @text.split.join("").length
 
-    @word_count = "Replace this string with your answer."
+    @word_count = @text.split.length
 
-    @occurrences = "Replace this string with your answer."
+    @occurrences = unique1(@text)
 
     # ================================================================================
     # Your code goes above.
@@ -38,7 +49,7 @@ class CalculationsController < ApplicationController
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
 
-    @monthly_payment = "Replace this string with your answer."
+    @monthly_payment = @apr/12/100 * @principal / (1-(1+@apr/12/100)**(-@years*12))
 
     # ================================================================================
     # Your code goes above.
@@ -60,12 +71,12 @@ class CalculationsController < ApplicationController
     #   number of seconds as a result.
     # ================================================================================
 
-    @seconds = "Replace this string with your answer."
-    @minutes = "Replace this string with your answer."
-    @hours = "Replace this string with your answer."
-    @days = "Replace this string with your answer."
-    @weeks = "Replace this string with your answer."
-    @years = "Replace this string with your answer."
+    @seconds = @ending - @starting
+    @minutes = @seconds/60
+    @hours = @minutes/60
+    @days = @hours/24
+    @weeks = @days/7
+    @years = @weeks/52
 
     # ================================================================================
     # Your code goes above.
@@ -73,6 +84,22 @@ class CalculationsController < ApplicationController
 
     render("time_between.html.erb")
   end
+
+  def median(array)
+  sorted = array.sort
+  len = sorted.length
+  return (sorted[(len - 1) / 2] + sorted[len / 2]) / 2.0
+    end
+
+    def variance(array)
+    mean1 = array.sum/array.length
+    total = 0
+    array.each do |number1|
+        total = total + (number1-mean1)**2
+    end
+    return(total/array.length)
+    end
+
 
   def descriptive_statistics
     @numbers = params[:list_of_numbers].gsub(',', '').split.map(&:to_f)
@@ -82,27 +109,27 @@ class CalculationsController < ApplicationController
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    @sorted_numbers = "Replace this string with your answer."
+    @sorted_numbers = @numbers.sort
 
-    @count = "Replace this string with your answer."
+    @count = @numbers.length
 
-    @minimum = "Replace this string with your answer."
+    @minimum = @numbers.min
 
-    @maximum = "Replace this string with your answer."
+    @maximum = @numbers.max
 
-    @range = "Replace this string with your answer."
+    @range = @maximum - @minimum
 
-    @median = "Replace this string with your answer."
+    @median = median(@numbers)
 
-    @sum = "Replace this string with your answer."
+    @sum = @numbers.sum
 
-    @mean = "Replace this string with your answer."
+    @mean = @sum/@numbers.length
 
-    @variance = "Replace this string with your answer."
+    @variance = variance(@numbers)
 
-    @standard_deviation = "Replace this string with your answer."
+    @standard_deviation = @variance**0.5
 
-    @mode = "Replace this string with your answer."
+    @mode = @numbers.uniq.max_by{ |i| @numbers.count( i ) }
 
     # ================================================================================
     # Your code goes above.
